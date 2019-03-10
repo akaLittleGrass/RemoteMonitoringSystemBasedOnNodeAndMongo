@@ -30,7 +30,7 @@
                 <li @click="goToLogin">点击登陆</li>
             </ul>
         </div>
-        <div class="operation-area">
+        <div class="operation-area" v-if="user">
             <div class="device-btn">
                 <span class="device-detail">「设备一」 当前状态：{{deviceStatus1?'开启':'关闭'}} </span><el-button type="info" @click="setDviceStatus('device1')">{{deviceStatus1?'关闭':'开启'}}</el-button>
             </div>
@@ -106,7 +106,6 @@ export default {
         axios.get('http://localhost:3000/device/find').then(function(response){
             if(response.status === 200){
                 const deviceList = response.data;
-                console.log(deviceList);
                 for(let value of deviceList){
                     switch(value.id){
                         case 'device1':
@@ -210,14 +209,11 @@ export default {
                 id: deviceId,
                 status: deviceStatus
             }
-            console.log(data)
             axios.post(url, data).then(function(res){
-                console.log(res.data)
                 if(res.data === 'succeed'){
                     switch(deviceId){
                         case 'device1':
                         that.deviceStatus1 = !that.deviceStatus1;
-                        // console.log(that.deviceStatus1)
                         break;
                         case 'device2':
                         that.deviceStatus2 = !that.deviceStatus2;
@@ -226,7 +222,15 @@ export default {
                         that.deviceStatus3 = !that.deviceStatus3;
                         break;
                     }
+                }else{
+                    that.$message({
+                        message: '操作失败',
+                        type: 'warning',
+                        customClass: 'messageBox',
+                        duration: 1500,
+                    });
                 }
+
             }).catch(function(error){
                 console.log(error)
             })
