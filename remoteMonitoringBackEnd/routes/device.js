@@ -10,7 +10,8 @@ mongoose.connect(dburl, { useNewUrlParser: true ,useCreateIndex: true,})
 let deviceSchema = mongoose.Schema({
     id: String,
     status: Boolean,
-    type: String
+    type: String,
+    isSlow: Boolean
 });
 
 let Devices = mongoose.model('status', deviceSchema); 
@@ -19,7 +20,7 @@ router.post('/setDevice', function(req, res, next){
    const target = {
        id: req.body.id
    }
-   console.log(req.body)
+   console.log(req.body);
    Devices.findOneAndUpdate(target, req.body, function(err, device){
     if(err) throw err;
     if(device){
@@ -32,9 +33,17 @@ router.post('/setDevice', function(req, res, next){
 })
 
 router.get('/find', function(req, res){
-    Devices.find({type: 'switch'}, function(err, devices){
+    Devices.find({type: 'switch'}, function(err, data){
         if(err) throw err;
-        res.status(200).send(devices);
+        res.status(200).send(data);
+    })
+})
+
+router.get('/read', function(req, res){
+    Devices.find({type: 'sensor'}, function(err, data){
+        if(err) throw err;
+        console.log(data);
+        res.status(200).send(data[0]);
     })
 })
 

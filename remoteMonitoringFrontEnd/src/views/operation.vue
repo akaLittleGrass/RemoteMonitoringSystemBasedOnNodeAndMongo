@@ -32,14 +32,20 @@
         </div>
         <div class="operation-area" v-if="user">
             <div class="device-btn">
-                <span class="device-detail">「设备一」 当前状态：{{deviceStatus1?'开启':'关闭'}} </span><el-button type="info" @click="setDviceStatus('device1')">{{deviceStatus1?'关闭':'开启'}}</el-button>
+                <span class="device-detail">「一号设备」 当前状态：{{deviceStatus1?'开启':'关闭'}} </span><el-button type="info" @click="setDeviceStatus('device1')">{{deviceStatus1?'关闭':'开启'}}</el-button>
             </div>
             <div class="device-btn">
-                <span class="device-detail">「设备二」 当前状态：{{deviceStatus2?'开启':'关闭'}} </span><el-button type="info" @click="setDviceStatus('device2')">{{deviceStatus2?'关闭':'开启'}}</el-button>
+                <span class="device-detail">「二号设备」 当前状态：{{deviceStatus2?'开启':'关闭'}} </span><el-button type="info" @click="setDeviceStatus('device2')">{{deviceStatus2?'关闭':'开启'}}</el-button>
             </div>
             <div class="device-btn">
-                <span class="device-detail">「设备三」 当前状态：{{deviceStatus3?'开启':'关闭'}} </span><el-button type="info" @click="setDviceStatus('device3')">{{deviceStatus3?'关闭':'开启'}}</el-button>
+                <span class="device-detail">「步进电机」 当前状态：{{deviceStatus3?'开启':'关闭'}} </span><el-button type="info" @click="setDeviceStatus('device3')">{{deviceStatus3?'关闭':'开启'}}</el-button>
             </div>
+            <div class="device-btn">
+                <span class="device-detail">「电机转速」 当前状态：{{deviceStatus3?isSlow?'慢速':'快速':'——'}} </span><el-button type="info" :disabled="!deviceStatus3" @click="setDeviceStatus('speed')">切换</el-button>
+            </div>
+        </div>
+        <div id="chart" ref="chartContainner" class="operation-area" v-if="user">
+           
         </div>
         <div v-if="!user" class="notice">
             请登陆
@@ -82,6 +88,7 @@
 
 <script>
 import axios from 'axios';
+const echarts = require('echarts');
 
 export default {
     name: 'operation',
@@ -98,11 +105,25 @@ export default {
             deviceStatus1: false,
             deviceStatus2: false,
             deviceStatus3: false,
+            isSlow: false
         }
     },
     mounted: function(){
         const token = localStorage.getItem('token');
         const that = this;
+        if(token){
+            axios.defaults.headers.common['token'] = token;
+            axios.get('http://localhost:3000/users/verify')
+            .then(function (response) {
+                if(response.status === 200){
+                    that.user = response.data.userName;
+                    that.userType = response.data.type;
+                }   
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        };
         axios.get('http://localhost:3000/device/find').then(function(response){
             if(response.status === 200){
                 const deviceList = response.data;
@@ -116,24 +137,13 @@ export default {
                         break;
                         case 'device3':
                         that.deviceStatus3 = value.status;
+                        that.isSlow = value.isSlow;
                         break;
                     }
                 }
+                that.drawLine();
             }
         })
-        if(token){
-            axios.defaults.headers.common['token'] = token;
-            axios.get('http://localhost:3000/users/verify')
-            .then(function (response) {
-                if(response.status === 200){
-                    that.user = response.data.userName;
-                    that.userType = response.data.type;
-                }   
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        }
     },
     methods: {
         logout(){
@@ -190,8 +200,9 @@ export default {
                 console.log(error);
             });
         },
-        setDviceStatus(deviceId){
+        setDeviceStatus(deviceId){
             let deviceStatus;
+            let setSpeed;
             switch(deviceId){
                 case 'device1':
                 deviceStatus = !this.deviceStatus1;
@@ -202,6 +213,12 @@ export default {
                 case 'device3':
                 deviceStatus = !this.deviceStatus3;
                 break;
+                case 'speed':
+                setSpeed = {
+                    id: 'device3',
+                    isSlow: !this.isSlow
+                }
+                break;
             }
             const url = 'http://localhost:3000/device/setDevice';
             const that = this;
@@ -209,7 +226,7 @@ export default {
                 id: deviceId,
                 status: deviceStatus
             }
-            axios.post(url, data).then(function(res){
+            axios.post(url, setSpeed||data).then(function(res){
                 if(res.data === 'succeed'){
                     switch(deviceId){
                         case 'device1':
@@ -221,6 +238,9 @@ export default {
                         case 'device3':
                         that.deviceStatus3 = !that.deviceStatus3;
                         break;
+                        case 'speed':
+                        that.isSlow = !that.isSlow;
+                        break;
                     }
                 }else{
                     that.$message({
@@ -230,10 +250,65 @@ export default {
                         duration: 1500,
                     });
                 }
-
             }).catch(function(error){
                 console.log(error)
             })
+        },
+        drawLine(){
+            const temData = [];
+            const humData = [];
+            const chartOption = {
+                title: { text: '温湿度(%)' },
+                legend: {
+                    data: ['温度', '湿度']
+                },
+                animation: false,
+                tooltip: { trigger: 'axis' },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: [1, 2, 3, 4, 5, 6]
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    name: '温度',
+                    type: 'line',
+                    data: temData
+                },
+                {
+                    name: '湿度',
+                    type: 'line',
+                    data: humData
+                }]
+            };
+            const chartContainner = this.$refs.chartContainner;
+            const that = this;
+            if(chartContainner){
+                let chart = echarts.init(chartContainner);
+                chart.setOption(chartOption);
+                setInterval(function(){
+                    axios.get('http://localhost:3000/device/read').then(function(response){
+                        if(response.data.temperature&&response.data.humidity){
+                            if(temData.length === 6) temData.shift();
+                            temData.push(response.data.temperature);
+                            if(humData.length === 6) humData.shift();
+                            humData.push(response.data.humidity);
+                            chart.setOption({
+                                 series: [{
+                                    seriesIndex: 0,
+                                    data: temData
+                                },
+                                {
+                                    seriesIndex: 1,
+                                    data: humData
+                                }]
+                            });
+                        }
+                    })
+                }, 2500)
+            }
         }
     }
 }
@@ -354,9 +429,8 @@ export default {
    }
    .operation-area{
        font-size: 18px;
-    //    background-color: #ddd;
        height: 300px;
-       margin: 57px 3%;
+       margin: 30px 3%;
        padding: 10px 0;
        display: flex;
        justify-content: center;
@@ -367,7 +441,13 @@ export default {
        margin: 10px 0;
    }
    .device-detail{
-       margin-right: 30px;
+       margin-right: 15px;
+   }
+   #chart{
+       width: 50%;
+       min-width: 330px;
+       margin: 0 auto;
+       margin-top: -50px;
    }
 </style>
 
