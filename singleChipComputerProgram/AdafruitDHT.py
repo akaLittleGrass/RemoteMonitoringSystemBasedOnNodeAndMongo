@@ -50,7 +50,7 @@ while(1):
 
     if humidity is not None and temperature is not None:
         status.update({"type":"sensor"},{'$set':{"temperature":temperature}})#温度数据写入云数据库
-        status.update({"type":"sensor"},{'$set':{"humidity":humidity}})#湿度诗句写入云数据库
+        status.update({"type":"sensor"},{'$set':{"humidity":humidity}})#湿度数据写入云数据库
         print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))#终端输出温湿度值
     else:
         print('Failed to get reading. Try again!')
