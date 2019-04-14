@@ -46,13 +46,13 @@ else:
 # Try to grab a sensor reading.  Use the read_retry method which will retry up
 # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
 while(1):
-    humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+    humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)#获取传感器数据
 
     if humidity is not None and temperature is not None:
-        status.update({"type":"sensor"},{'$set':{"temperature":temperature}})
-        status.update({"type":"sensor"},{'$set':{"humidity":humidity}})
-        print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))
+        status.update({"type":"sensor"},{'$set':{"temperature":temperature}})#温度数据写入云数据库
+        status.update({"type":"sensor"},{'$set':{"humidity":humidity}})#湿度诗句写入云数据库
+        print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))#终端输出温湿度值
     else:
         print('Failed to get reading. Try again!')
         sys.exit(1)
-    time.sleep(2)
+    time.sleep(2)#采样频率为两秒

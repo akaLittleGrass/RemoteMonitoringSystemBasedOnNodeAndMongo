@@ -13,26 +13,26 @@ let deviceSchema = mongoose.Schema({
 const Devices = mongoose.model('status', deviceSchema); 
 let status1, status2, status3;
 const find = function(){
-  Devices.find({type: 'switch'}, function(err, devices){
+  Devices.find({type: 'switch'}, function(err, devices){//查询数据库中IO控制字段
     if(err) throw err;
     for(let value of devices){
       switch(value.id){
         case 'device1':
         if(status1 !== value.status){
           console.log('status1 was changed');
-          status1 = value.status;
+          status1 = value.status;//设置相关IO引脚状态
         }
         break;
         case 'device2':
         if(status2 !== value.status){
           console.log('status2 was changed');
-          status2 = value.status;
+          status2 = value.status;//设置相关引脚IO状态
         }
         break;
         case 'device3':
         if(status3 !== value.status){
           console.log('status3 was changed');
-          status3 = value.status;
+          status3 = value.status;//设置相关引脚IO状态
         }
         break;
       }
