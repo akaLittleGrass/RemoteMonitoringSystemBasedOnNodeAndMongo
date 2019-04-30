@@ -17,7 +17,7 @@ arr = [0,1,2,3];
 if clockwise!=1: 
     arr = [3,2,1,0];
 
-ports = [40,38,36,35];
+ports = [40,38,36,35];#40，38，36，35引脚分别连接电机驱动器的四个输入
 for p in ports: 
     GPIO.setup(p,GPIO.OUT)
 
