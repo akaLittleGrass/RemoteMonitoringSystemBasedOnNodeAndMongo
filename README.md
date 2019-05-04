@@ -11,4 +11,4 @@
 密码：emm   
 有时会登陆不上，大概率是因为连接Mongodb失败，通常重启后端程序能解决😓…………
 
-![avatar](https://i.loli.net/2019/05/04/5ccd9073d4d2b.jpg)
+![图片 1.png](https://i.loli.net/2019/05/04/5ccd93b0b2a34.png)
