@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ajax from '../utils/ajax'
+//import ajax from '../utils/ajax'
 import axios from 'axios'
 
 export default {
