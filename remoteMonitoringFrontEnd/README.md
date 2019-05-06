@@ -5,7 +5,7 @@
 npm install
 ```
 
-### 运行
+### start
 ```
 npm run serve
 ```
