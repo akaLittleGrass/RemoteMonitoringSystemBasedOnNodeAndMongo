@@ -1,10 +1,10 @@
 export default function(url, data, options){
     options = Object.assign({
-        method: 'POST', // or 'PUT'
-        body: JSON.stringify(data), // data can be `string` or {object}!
-        // headers: new Headers({
-        //     'Content-Type': 'application/json'
-        // })
+        method: 'POST', 
+        body: JSON.stringify(data), 
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        })
     }, options)
 
     return fetch(url, options)

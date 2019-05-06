@@ -13,8 +13,7 @@
 </template>
 
 <script>
-//import ajax from '../utils/ajax'
-import axios from 'axios'
+import request from '../utils/request';
 
 export default {
   name: 'login',
@@ -27,11 +26,10 @@ export default {
   methods: {
     login(){
       let that = this;
-      axios.post('http://localhost:3000/users/find', {
+      request('/users/find', 'POST', {
         userName: this.userName,
         passWord: this.passWord,
-      })
-      .then(function (response) {
+      }).then(function(response){
         console.log(response);
         localStorage.setItem('token', response.data.token)
         if(response.data.result === 'found'){
@@ -45,9 +43,6 @@ export default {
           });
         }
       })
-      .catch(function (error) {
-        console.log(error);
-      });
     },
     pageBackUp(){
       this.$router.push({  

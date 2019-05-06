@@ -88,6 +88,8 @@
 
 <script>
 import axios from 'axios';
+import request from '../utils/request';
+
 const echarts = require('echarts');
 
 export default {
@@ -113,18 +115,14 @@ export default {
         const that = this;
         if(token){
             axios.defaults.headers.common['token'] = token;
-            axios.get('http://localhost:3000/users/verify')
-            .then(function (response) {
+            request('/users/verify', 'GET').then(function(response){
                 if(response.status === 200){
                     that.user = response.data.userName;
                     that.userType = response.data.type;
                 }   
             })
-            .catch(function (error) {
-                console.log(error);
-            });
         };
-        axios.get('http://localhost:3000/device/find').then(function(response){
+        request('/device/find', 'GET').then(function(response){
             if(response.status === 200){
                 const deviceList = response.data;
                 for(let value of deviceList){
@@ -165,7 +163,7 @@ export default {
             this.manageOpType = type;
         },
         editUserInfo(){
-            let url ; 
+            let path ; 
             let that = this;
             let data = {
                 userName: this.inputUserName, 
@@ -174,20 +172,20 @@ export default {
             }
             switch(this.manageOpType){
                 case '修改密码':
-                url = 'http://localhost:3000/users/update';
+                path = '/users/update';
                 delete data.type;
                 break;
                 case '添加用户':
-                url = 'http://localhost:3000/users/insert';
+                path = '/users/insert';
                 break;
                 case '删除用户':
-                url = 'http://localhost:3000/users/delete';
+                path = '/users/delete';
                 delete data.passWord;
                 delete data.type;
                 break;
             }
-            axios.post(url, data).then(function(res){
-                if(res.data.result === 'succeed'){
+            request(path, 'POST', data).then(function(response){
+                if(response.data.result === 'succeed'){
                     that.manageTagShow = false;
                     that.showMobileMenu = false;
                     that.$message({
@@ -196,9 +194,7 @@ export default {
                         customClass: 'messageBox',
                     });
                 }
-            }).catch(function(error){
-                console.log(error);
-            });
+            })
         },
         setDeviceStatus(deviceId){
             let deviceStatus;
@@ -220,14 +216,14 @@ export default {
                 }
                 break;
             }
-            const url = 'http://localhost:3000/device/setDevice';
+            const path = '/device/setDevice';
             const that = this;
             const data = {
                 id: deviceId,
                 status: deviceStatus
-            }
-            axios.post(url, setSpeed||data).then(function(res){
-                if(res.data === 'succeed'){
+            };
+            request(path, 'POST', setSpeed||data).then(function(response){
+                if(response.data === 'succeed'){
                     switch(deviceId){
                         case 'device1':
                         that.deviceStatus1 = !that.deviceStatus1;
@@ -250,8 +246,6 @@ export default {
                         duration: 1500,
                     });
                 }
-            }).catch(function(error){
-                console.log(error)
             })
         },
         drawLine(){
@@ -289,7 +283,7 @@ export default {
                 let chart = echarts.init(chartContainner);
                 chart.setOption(chartOption);
                 setInterval(function(){
-                    axios.get('http://localhost:3000/device/read').then(function(response){
+                    request('/device/read', 'GET').then(function(response){
                         if(response.data.temperature&&response.data.humidity){
                             if(temData.length === 6) temData.shift();
                             temData.push(response.data.temperature);
