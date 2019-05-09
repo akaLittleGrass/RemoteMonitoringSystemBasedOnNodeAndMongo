@@ -2,7 +2,7 @@
     <div class="root">
         <header class="top-bar">
             <section class="slogan">
-                Remote Monitoring System
+                <h1>Remote Monitoring System</h1>
             </section>
             <div class="state-bar">
                 <ul v-if="user" class="pc-menu">
