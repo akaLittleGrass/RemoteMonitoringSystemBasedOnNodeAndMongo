@@ -23,7 +23,7 @@ rpio是node.js的一个模块，用于对树莓派单片机的编程。singleChi
 ![Xnip2019-05-10_17-06-19.jpg](https://i.loli.net/2019/05/10/5cd5419824657.jpg)
 
 管理员可以增删改账户：
-![Xnip2019-05-10_17-03-42.jpg](https://i.loli.net/2019/05/10/5cd541981d60e.jpg)
+![Xnip2019-05-10_17-26-23.jpg](https://i.loli.net/2019/05/10/5cd543c99c46d.jpg)
 
 
 点击[管理员权限]:
