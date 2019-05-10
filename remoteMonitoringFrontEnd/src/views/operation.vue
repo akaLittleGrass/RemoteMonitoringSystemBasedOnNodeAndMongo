@@ -1,10 +1,10 @@
 <template>
     <div class="root">
         <header class="top-bar">
-            <section class="slogan">
+            <section>
                 <h1>Remote Monitoring System</h1>
             </section>
-            <div class="state-bar">
+            <div class="state">
                 <ul v-if="user" class="pc-menu">
                     <li>{{this.user}}</li>
                     <li @click="showManageTag" class="user-type" v-if="userType === 'master'">[管理员权限]</li>
@@ -43,6 +43,10 @@
             <div class="device-btn">
                 <span class="device-detail">「电机转速」 当前状态：{{deviceStatus3?isSlow?'慢速':'快速':'——'}} </span><el-button type="info" :disabled="!deviceStatus3" @click="setDeviceStatus('speed')">切换</el-button>
             </div>
+        </div>
+        <div id="number-bar" v-if="user">
+            温度值：{{temperature}}°C&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;湿度值：{{humidity}}%<br/>
+            <span class="time-stamp">{{timeStamp}}</span>
         </div>
         <div id="chart" ref="chartContainner" class="operation-area" v-if="user">
            
@@ -107,7 +111,10 @@ export default {
             deviceStatus1: false,
             deviceStatus2: false,
             deviceStatus3: false,
-            isSlow: false
+            isSlow: false,
+            temperature: '',
+            humidity: '',
+            timeStamp: '',
         }
     },
     mounted: function(){
@@ -285,6 +292,9 @@ export default {
                 setInterval(function(){
                     request('/device/read', 'GET').then(function(response){
                         if(response.data.temperature&&response.data.humidity){
+                            that.temperature = response.data.temperature;
+                            that.humidity = response.data.humidity;
+                            that.timeStamp = new Date();
                             if(temData.length === 6) temData.shift();
                             temData.push(response.data.temperature);
                             if(humData.length === 6) humData.shift();
@@ -323,7 +333,7 @@ export default {
         z-index: 100;
         border-bottom: 1px solid #ddd;
     }
-    .slogan{
+    h1{
         display: block;
         position: fixed;
         top: 2px;
@@ -334,8 +344,9 @@ export default {
         z-index: 1;
         font-weight: 100;
         color: #444;
+        font-size: 28px;
     }
-   .state-bar{
+   .state{
         color: #444;
         padding: 12px 4px 0 5%;
         max-width: 1180px;  
@@ -441,7 +452,14 @@ export default {
        width: 50%;
        min-width: 330px;
        margin: 0 auto;
-       margin-top: -50px;
+   }
+   #number-bar{
+        height: 60px;
+        margin-top: -60px;
+        font-size: 20px;
+        .time-stamp{
+            font-size: 14px;
+        }
    }
 </style>
 
