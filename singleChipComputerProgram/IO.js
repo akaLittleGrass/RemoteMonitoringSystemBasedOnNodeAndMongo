@@ -49,4 +49,4 @@ const find = function(){
     }
   })
 }
-const Interval = setInterval(()=>find(),2000);
+const Interval = setInterval(find,2000);
