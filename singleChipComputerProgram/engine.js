@@ -60,7 +60,7 @@ const find = function(){
 				if(lastIsForward !== engine.isForward){
 					clearInterval(runSlow);
 					if(engine.isForward){
-					runSlow = setInterval(runForwardSlow, 100);
+						runSlow = setInterval(runForwardSlow, 100);
 					}else{
 						runSlow = setInterval(runReverseSlow, 100);
 					}
@@ -92,7 +92,6 @@ const find = function(){
 	}
   })
 }
-console.log('ready');
 const Interval = setInterval(find,2000);
 
 
