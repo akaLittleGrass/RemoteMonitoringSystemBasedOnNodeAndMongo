@@ -11,7 +11,8 @@ let deviceSchema = mongoose.Schema({
     id: String,
     status: Boolean,
     type: String,
-    isSlow: Boolean
+    isSlow: Boolean,
+    isForward: Boolean
 });
 
 let Devices = mongoose.model('status', deviceSchema); 

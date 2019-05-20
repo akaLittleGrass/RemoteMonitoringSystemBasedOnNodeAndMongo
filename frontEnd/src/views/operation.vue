@@ -32,16 +32,19 @@
         </div>
         <div class="operation-area" v-if="user">
             <div class="device-btn">
-                <span class="device-detail">「一号设备」 当前状态：{{deviceStatus1?'开启':'关闭'}} </span><el-button type="info" @click="setDeviceStatus('device1')">{{deviceStatus1?'关闭':'开启'}}</el-button>
+                <span class="device-detail">「一号设备」 当前状态：{{IO1Status?'开启':'关闭'}} </span><el-button type="info" @click="setDeviceStatus('device1')">{{IO1Status?'关闭':'开启'}}</el-button>
             </div>
             <div class="device-btn">
-                <span class="device-detail">「二号设备」 当前状态：{{deviceStatus2?'开启':'关闭'}} </span><el-button type="info" @click="setDeviceStatus('device2')">{{deviceStatus2?'关闭':'开启'}}</el-button>
+                <span class="device-detail">「二号设备」 当前状态：{{IO2Status?'开启':'关闭'}} </span><el-button type="info" @click="setDeviceStatus('device2')">{{IO2Status?'关闭':'开启'}}</el-button>
             </div>
             <div class="device-btn">
-                <span class="device-detail">「步进电机」 当前状态：{{deviceStatus3?'开启':'关闭'}} </span><el-button type="info" @click="setDeviceStatus('device3')">{{deviceStatus3?'关闭':'开启'}}</el-button>
+                <span class="device-detail">「直流电机」 当前状态：{{motorIsOn?'开启':'关闭'}} </span><el-button type="info" @click="setDeviceStatus('device3')">{{motorIsOn?'关闭':'开启'}}</el-button>
             </div>
             <div class="device-btn">
-                <span class="device-detail">「电机转速」 当前状态：{{deviceStatus3?isSlow?'慢速':'快速':'——'}} </span><el-button type="info" :disabled="!deviceStatus3" @click="setDeviceStatus('speed')">切换</el-button>
+                <span class="device-detail">「电机转速」 当前状态：{{motorIsOn?isSlow?'慢速':'快速':'——'}} </span><el-button type="info" :disabled="!motorIsOn" @click="setDeviceStatus('speed')">切换</el-button>
+            </div>
+            <div class="device-btn">
+                <span class="device-detail">「电机转向」 当前状态：{{motorIsOn?isForward?'正向':'反向':'——'}} </span><el-button type="info" :disabled="!motorIsOn" @click="setDeviceStatus('direction')">切换</el-button>
             </div>
         </div>
         <div id="number-bar" v-if="user">
@@ -108,10 +111,11 @@ export default {
             inputUserName: '',
             inputPassWord: '',
             inputUserType: '',
-            deviceStatus1: false,
-            deviceStatus2: false,
-            deviceStatus3: false,
+            IO1Status: false,
+            IO2Status: false,
+            motorIsOn: false,
             isSlow: false,
+            isForward: false,
             temperature: '',
             humidity: '',
             timeStamp: '',
@@ -135,14 +139,15 @@ export default {
                 for(let value of deviceList){
                     switch(value.id){
                         case 'device1':
-                        that.deviceStatus1 = value.status;
+                        that.IO1Status = value.status;
                         break;
                         case 'device2':
-                        that.deviceStatus2 = value.status;
+                        that.IO2Status = value.status;
                         break;
                         case 'device3':
-                        that.deviceStatus3 = value.status;
+                        that.motorIsOn = value.status;
                         that.isSlow = value.isSlow;
+                        that.isForward = value.isForward;
                         break;
                     }
                 }
@@ -206,15 +211,16 @@ export default {
         setDeviceStatus(deviceId){
             let deviceStatus;
             let setSpeed;
+            let setDirection;
             switch(deviceId){
                 case 'device1':
-                deviceStatus = !this.deviceStatus1;
+                deviceStatus = !this.IO1Status;
                 break;
                 case 'device2':
-                deviceStatus = !this.deviceStatus2;
+                deviceStatus = !this.IO2Status;
                 break;
                 case 'device3':
-                deviceStatus = !this.deviceStatus3;
+                deviceStatus = !this.motorIsOn;
                 break;
                 case 'speed':
                 setSpeed = {
@@ -222,6 +228,11 @@ export default {
                     isSlow: !this.isSlow
                 }
                 break;
+                case 'direction':
+                setDirection = {
+                    id: 'device3',
+                    isForward: !this.isForward
+                }
             }
             const path = '/device/setDevice';
             const that = this;
@@ -229,21 +240,23 @@ export default {
                 id: deviceId,
                 status: deviceStatus
             };
-            request(path, 'POST', setSpeed||data).then(function(response){
+            request(path, 'POST', setSpeed||setDirection||data).then(function(response){
                 if(response.data === 'succeed'){
                     switch(deviceId){
                         case 'device1':
-                        that.deviceStatus1 = !that.deviceStatus1;
+                        that.IO1Status = !that.IO1Status;
                         break;
                         case 'device2':
-                        that.deviceStatus2 = !that.deviceStatus2;
+                        that.IO2Status = !that.IO2Status;
                         break;
                         case 'device3':
-                        that.deviceStatus3 = !that.deviceStatus3;
+                        that.motorIsOn = !that.motorIsOn;
                         break;
                         case 'speed':
                         that.isSlow = !that.isSlow;
                         break;
+                        case 'direction':
+                        that.isForward = !that.isForward;
                     }
                 }else{
                     that.$message({
@@ -434,7 +447,7 @@ export default {
    }
    .operation-area{
        font-size: 18px;
-       height: 300px;
+       height: 370px;
        margin: 30px 3%;
        padding: 10px 0;
        display: flex;
