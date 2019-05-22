@@ -122,6 +122,7 @@ export default {
         }
     },
     mounted: function(){
+        
         const token = localStorage.getItem('token');
         const that = this;
         if(token){
@@ -277,7 +278,6 @@ export default {
                 legend: {
                     data: ['温度', '湿度']
                 },
-                animation: false,
                 tooltip: { trigger: 'axis' },
                 xAxis: {
                     type: 'category',

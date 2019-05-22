@@ -60,6 +60,7 @@ router.post('/login', function(req, res, next){
   console.log(data);
   User.find(data, function(err, users){
     if(err) throw err;
+    console.log(users);
     if(!users.length){
       notFound(res);
       return
@@ -87,10 +88,9 @@ router.use('/verify', function(req, res){
         if (err) {
           return res.json({ success: false, message: '无效的token.' });    
         } else {
-          console.log(decoded);
           let tokenData ={
             userName: decoded.userName,
-            passWord: decoded.type
+            type: decoded.type
           };
           let token = jwt.sign(tokenData, secret, {
             expiresIn : 60*60*5
