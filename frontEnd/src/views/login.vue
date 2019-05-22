@@ -26,12 +26,12 @@ export default {
   methods: {
     login(){
       let that = this;
-      request('/users/find', 'POST', {
+      request('/users/login', 'POST', {
         userName: this.userName,
         passWord: this.passWord,
       }).then(function(response){
         console.log(response);
-        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('token', response.data.token);
         if(response.data.result === 'found'){
           that.$router.push({  
             path:'/',   

@@ -55,7 +55,7 @@ router.post('/insert', function(req, res, next){
   })  
 });
 
-router.post('/find', function(req, res, next){
+router.post('/login', function(req, res, next){
   const data = req.body;
   console.log(data);
   User.find(data, function(err, users){
@@ -88,9 +88,16 @@ router.use('/verify', function(req, res){
           return res.json({ success: false, message: '无效的token.' });    
         } else {
           console.log(decoded);
-          res.status(200).send({
+          let tokenData ={
             userName: decoded.userName,
-            type: decoded.type
+            passWord: decoded.type
+          };
+          let token = jwt.sign(tokenData, secret, {
+            expiresIn : 60*60*5
+          });
+          res.status(200).send({
+            ...tokenData,
+            token: token
           })
       }
     });

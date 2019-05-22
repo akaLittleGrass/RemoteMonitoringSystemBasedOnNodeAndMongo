@@ -130,6 +130,7 @@ export default {
                 if(response.status === 200){
                     that.user = response.data.userName;
                     that.userType = response.data.type;
+                    localStorage.setItem('token', response.data.token);
                 }   
             })
         };
