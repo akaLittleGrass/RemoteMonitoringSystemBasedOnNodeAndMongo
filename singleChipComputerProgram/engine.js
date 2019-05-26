@@ -76,7 +76,7 @@ const find = function(){
 		}else{
 			if(runSlow){
 				clearInterval(runSlow);
-				runSlow = 0;
+				runSlow = void 0;
 			}
 			if(engine.isForward){
 				console.log('runForward');
