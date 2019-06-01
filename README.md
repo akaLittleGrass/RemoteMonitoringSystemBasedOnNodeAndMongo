@@ -15,7 +15,7 @@ npm i
 
 测试账号：zhangwuji   
 密码：emm   
-前端src/utils/request.js中的请求的域名端口号是否与后端所在的一致    
+测试的话前端src/utils/request.js中的请求的域名端口号得和后端所在的一致，手动匹配一下    
 
 
 登陆界面：
