@@ -8,7 +8,7 @@ client = pymongo.MongoClient(dburl)
 db = client.deviceMsg
 status = db.status
 
-sensor_args = { '11': Adafruit_DHT.DHT11,#11号引脚连到DHT11温湿度传感器的信号端
+sensor_args = { '11': Adafruit_DHT.DHT11,
                 '22': Adafruit_DHT.DHT22,
                 '2302': Adafruit_DHT.AM2302 }
 if len(sys.argv) == 3 and sys.argv[1] in sensor_args:
@@ -20,13 +20,13 @@ else:
     sys.exit(1)
 
 while(1):
-    humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)#获取传感器数据
+    humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 
     if humidity is not None and temperature is not None:
-        status.update({"type":"sensor"},{'$set':{"temperature":temperature}})#温度数据写入云数据库
-        status.update({"type":"sensor"},{'$set':{"humidity":humidity}})#湿度数据写入云数据库
-        print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))#终端输出温湿度值
+        status.update({"type":"sensor"},{'$set':{"temperature":temperature}})
+        status.update({"type":"sensor"},{'$set':{"humidity":humidity}})
+        print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))
     else:
         print('Failed to get reading. Try again!')
         sys.exit(1)
-    time.sleep(2)#采样频率为两秒
+    time.sleep(2)
