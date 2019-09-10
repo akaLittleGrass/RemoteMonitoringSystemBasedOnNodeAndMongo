@@ -47,5 +47,3 @@ exports.find = function (collectionName,json,callback) {
     });
 }
 
-//let User = mongoose.model('User', userSchema);
-//module.exports = User;

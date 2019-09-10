@@ -1,9 +1,9 @@
 <template>
   <div class="root">
-    <img @click="pageBackUp" class="backup" src="../../dist/img/backup.svg" alt="backup">
+    <img @click="pageBackUp" class="backup" src="../assets/backup.svg" alt="backup">
     <div class="main-content">
       <div class="row login-icon" >
-        <img src="../../dist/img/clickToLogin.svg" alt="login">
+        <img src="../assets/clickToLogin.svg" alt="login">
       </div>
       <el-input type="" class="row" v-model="userName" placeholder="请输入用户名"></el-input>
       <el-input type="password" class="row" v-model="passWord" placeholder="请输入密码"></el-input>

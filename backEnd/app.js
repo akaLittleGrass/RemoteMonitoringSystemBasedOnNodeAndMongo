@@ -1,14 +1,14 @@
-let createError = require('http-errors');
-let express = require('express');
-let path = require('path');
-let cookieParser = require('cookie-parser');
-let logger = require('morgan');
-let cors = require('cors');
-let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
-let deviceRouter = require('./routes/device')
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const cors = require('cors');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const deviceRouter = require('./routes/device')
 
-let app = express();
+const app = express();
 app.use(cors());
 
 // view engine setup

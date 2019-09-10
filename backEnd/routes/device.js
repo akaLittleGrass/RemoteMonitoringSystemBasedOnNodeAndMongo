@@ -7,7 +7,7 @@ mongoose.connect(dburl, { useNewUrlParser: true ,useCreateIndex: true,})
 .then(() => console.log("Mongodb of deviceMsg connected"))
 .catch(err => console.log(err));
 
-let deviceSchema = mongoose.Schema({
+const deviceSchema = mongoose.Schema({
     id: String,
     status: Boolean,
     type: String,
@@ -15,7 +15,7 @@ let deviceSchema = mongoose.Schema({
     isForward: Boolean
 });
 
-let Devices = mongoose.model('status', deviceSchema); 
+const Devices = mongoose.model('status', deviceSchema); 
 
 router.post('/setDevice', function(req, res, next){
    const target = {

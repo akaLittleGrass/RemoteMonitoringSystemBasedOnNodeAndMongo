@@ -9,7 +9,7 @@
                     <li>{{this.user}}</li>
                     <li @click="showManageTag" class="user-type" v-if="userType === 'master'">[管理员权限]</li>
                     <li class="log-btn" @click="logout">
-                        <img src="../../dist/img/16pxlogout.svg" alt="logout">
+                        <img src="../assets/16pxlogout.svg" alt="logout">
                         <span>退出登陆</span>
                     </li>
                 </ul>
@@ -17,14 +17,14 @@
                     <li class="log-btn" @click="goToLogin">点击登录</li>
                 </ul>
                 <div @click="toggleMobileMenu" class="mobile-menu-btn mobile-show">
-                    <img src="../../dist/img/menu.svg" alt="mobile-menu">
+                    <img src="../assets/menu.svg" alt="mobile-menu">
                 </div>
             </div>
         </header>
         <div class="mobile-nav-bar mobile-show" :class="{mobileMenuShow: !showMobileMenu}">
             <ul v-if="user">
                 <li>{{this.user}}<span @click="showManageTag" class="user-type" v-if="userType === 'master'">[管理员权限]</span></li>
-                <li @click="logout" class="log-btn"> <img src="../../dist/img/16pxlogout.svg" alt="logout"><span style="font-size:17px;">退出登陆</span></li>
+                <li @click="logout" class="log-btn"> <img src="../assets/16pxlogout.svg" alt="logout"><span style="font-size:17px;">退出登陆</span></li>
             </ul>
             <ul v-else>
                 <li @click="goToLogin">点击登陆</li>

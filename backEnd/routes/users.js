@@ -9,12 +9,12 @@ mongoose.connect(dburl, { useNewUrlParser: true })
 .then(() => console.log("Mongodb of users connected"))
 .catch(err => console.log(err));
 
-let userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
   userName: String,
   passWord: String,
   type: String
 });
-let User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
 const found = function(res, users) {
   res.status(200).send({
@@ -65,11 +65,11 @@ router.post('/login', function(req, res, next){
       notFound(res);
       return
     }
-    let tokenData = {
+    const tokenData = {
       userName: users[0].userName,
       type: users[0].type
     }
-    let token = jwt.sign(tokenData, secret, {
+    const token = jwt.sign(tokenData, secret, {
       expiresIn : 60*60*5
     });
     res.status(200).send({
@@ -88,11 +88,11 @@ router.use('/verify', function(req, res){
         if (err) {
           return res.json({ success: false, message: '无效的token.' });    
         } else {
-          let tokenData ={
+          const tokenData ={
             userName: decoded.userName,
             type: decoded.type
           };
-          let token = jwt.sign(tokenData, secret, {
+          const token = jwt.sign(tokenData, secret, {
             expiresIn : 60*60*5
           });
           res.status(200).send({
