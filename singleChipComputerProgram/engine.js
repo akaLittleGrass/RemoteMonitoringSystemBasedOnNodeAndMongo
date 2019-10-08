@@ -40,7 +40,7 @@ let runSlow;
 let lastIsForward;
 let lastIsSlow;
 
-let deviceSchema = mongoose.Schema({
+const deviceSchema = mongoose.Schema({
     id: String,
     status: Boolean,
     type: String,
