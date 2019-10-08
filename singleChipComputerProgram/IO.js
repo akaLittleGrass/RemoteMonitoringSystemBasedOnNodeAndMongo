@@ -10,7 +10,7 @@ rpio.write(16, rpio.LOW);
 rpio.open(18, rpio.OUTPUT);
 rpio.write(18, rpio.LOW);
 
-let deviceSchema = mongoose.Schema({
+const deviceSchema = mongoose.Schema({
     id: String,
     status: Boolean,
     type: String
