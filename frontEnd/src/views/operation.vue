@@ -124,36 +124,35 @@ export default {
     mounted: function(){
         
         const token = localStorage.getItem('token');
-        const that = this;
         if(token){
             axios.defaults.headers.common['token'] = token;
-            request('/users/verify', 'GET').then(function(response){
+            request('/users/verify', 'GET').then((response) => {
                 if(response.status === 200){
-                    that.user = response.data.userName;
-                    that.userType = response.data.type;
+                    this.user = response.data.userName;
+                    this.userType = response.data.type;
                     localStorage.setItem('token', response.data.token);
                 }   
             })
         };
-        request('/device/find', 'GET').then(function(response){
+        request('/device/find', 'GET').then((response) => {
             if(response.status === 200){
                 const deviceList = response.data;
                 for(let value of deviceList){
                     switch(value.id){
                         case 'device1':
-                        that.IO1Status = value.status;
+                        this.IO1Status = value.status;
                         break;
                         case 'device2':
-                        that.IO2Status = value.status;
+                        this.IO2Status = value.status;
                         break;
                         case 'device3':
-                        that.motorIsOn = value.status;
-                        that.isSlow = value.isSlow;
-                        that.isForward = value.isForward;
+                        this.motorIsOn = value.status;
+                        this.isSlow = value.isSlow;
+                        this.isForward = value.isForward;
                         break;
                     }
                 }
-                that.drawLine();
+                this.drawLine();
             }
         })
     },
@@ -178,8 +177,7 @@ export default {
         },
         editUserInfo(){
             let path ; 
-            let that = this;
-            let data = {
+            const data = {
                 userName: this.inputUserName, 
                 passWord: this.inputPassWord,
                 type: this.inputUserType,
@@ -198,11 +196,11 @@ export default {
                 delete data.type;
                 break;
             }
-            request(path, 'POST', data).then(function(response){
+            request(path, 'POST', data).then((response) => {
                 if(response.data.result === 'succeed'){
-                    that.manageTagShow = false;
-                    that.showMobileMenu = false;
-                    that.$message({
+                    this.manageTagShow = false;
+                    this.showMobileMenu = false;
+                    this.$message({
                         message: '操作成功',
                         type: 'success',
                         customClass: 'messageBox',
@@ -237,31 +235,30 @@ export default {
                 }
             }
             const path = '/device/setDevice';
-            const that = this;
             const data = {
                 id: deviceId,
                 status: deviceStatus
             };
-            request(path, 'POST', setSpeed||setDirection||data).then(function(response){
+            request(path, 'POST', setSpeed||setDirection||data).then((response) => {
                 if(response.data === 'succeed'){
                     switch(deviceId){
                         case 'device1':
-                        that.IO1Status = !that.IO1Status;
+                        this.IO1Status = !this.IO1Status;
                         break;
                         case 'device2':
-                        that.IO2Status = !that.IO2Status;
+                        this.IO2Status = !this.IO2Status;
                         break;
                         case 'device3':
-                        that.motorIsOn = !that.motorIsOn;
+                        this.motorIsOn = !this.motorIsOn;
                         break;
                         case 'speed':
-                        that.isSlow = !that.isSlow;
+                        this.isSlow = !this.isSlow;
                         break;
                         case 'direction':
-                        that.isForward = !that.isForward;
+                        this.isForward = !this.isForward;
                     }
                 }else{
-                    that.$message({
+                    this.$message({
                         message: '操作失败',
                         type: 'warning',
                         customClass: 'messageBox',
@@ -299,16 +296,15 @@ export default {
                 }]
             };
             const chartContainner = this.$refs.chartContainner;
-            const that = this;
             if(chartContainner){
                 let chart = echarts.init(chartContainner);
                 chart.setOption(chartOption);
                 setInterval(function(){
-                    request('/device/read', 'GET').then(function(response){
+                    request('/device/read', 'GET').then((response) => {
                         if(response.data.temperature&&response.data.humidity){
-                            that.temperature = response.data.temperature;
-                            that.humidity = response.data.humidity;
-                            that.timeStamp = new Date();
+                            this.temperature = response.data.temperature;
+                            this.humidity = response.data.humidity;
+                            this.timeStamp = new Date();
                             if(temData.length === 6) temData.shift();
                             temData.push(response.data.temperature);
                             if(humData.length === 6) humData.shift();

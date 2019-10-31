@@ -70,7 +70,7 @@ router.post('/login', function(req, res, next){
       type: users[0].type
     }
     const token = jwt.sign(tokenData, secret, {
-      expiresIn : 60*60*5
+      expiresIn : 60*60*12
     });
     res.status(200).send({
       result: 'found',

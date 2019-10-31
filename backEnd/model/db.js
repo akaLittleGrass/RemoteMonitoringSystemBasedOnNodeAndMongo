@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 
 function _connectDB(callback) {
-    var url = "mongodb://new-user_0:553744@monitoringusersverify-shard-00-00-fjxrl.azure.mongodb.net:27017,monitoringusersverify-shard-00-01-fjxrl.azure.mongodb.net:27017,monitoringusersverify-shard-00-02-fjxrl.azure.mongodb.net:27017/test?ssl=true&replicaSet=monitoringUsersVerify-shard-0&authSource=admin&retryWrites=true";
+    const url = "mongodb://new-user_0:553744@monitoringusersverify-shard-00-00-fjxrl.azure.mongodb.net:27017,monitoringusersverify-shard-00-01-fjxrl.azure.mongodb.net:27017,monitoringusersverify-shard-00-02-fjxrl.azure.mongodb.net:27017/test?ssl=true&replicaSet=monitoringUsersVerify-shard-0&authSource=admin&retryWrites=true";
     MongoClient.connect(url, function (err,db) {
         if(err) {
             callback(err,null);
@@ -24,14 +24,14 @@ exports.insertOne = function (collectionName, json, callback) {
 }
 
 exports.find = function (collectionName,json,callback) {
-    var result = [];   //结果数组
+    const result = [];   //结果数组
     if(arguments.length != 3) {
         callback("find函数接受三个参数",null);
         return ;
     }
     //链接数据库，链接之后查找所有
     _connectDB(function (err,db) {
-        var cursor = db.collection(collectionName).find(json);
+        const cursor = db.collection(collectionName).find(json);
         cursor.each(function (err, doc) {
             if(err) {
                 callback(err,null);
