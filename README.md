@@ -18,7 +18,7 @@ IO.js是简单IO控制，用GPIO.4、GPIO.5接两个LED灯然后接地，node IO
 有一个测试账号：zhangwuji   
 密码：emm     
 <div align='center'>
-  <img src='https://sm.ms/image/KHIeXqLuoxvVGMh' height='400px' width='500px'>
+  <img src='https://i.loli.net/2019/12/04/KHIeXqLuoxvVGMh.png' height='400px' width='500px'>
 </div>
 登陆界面：
 ![Xnip2019-04-14_23-26-09.jpg](https://i.loli.net/2019/05/04/5ccd94418be6c.jpg)
