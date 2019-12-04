@@ -20,9 +20,9 @@ IO.js是简单IO控制，用GPIO.4、GPIO.5接两个LED灯然后接地，node IO
 
 
 实物图：
-
+<div align='center'>
   <img src='https://i.loli.net/2019/12/04/KHIeXqLuoxvVGMh.png' height='400px' width='500px'>
-
+</div>
 
 
 登陆界面：
