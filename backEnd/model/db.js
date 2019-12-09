@@ -18,18 +18,17 @@ exports.insertOne = function (collectionName, json, callback) {
             }
             db.collection(collectionName).insertOne(json, function (err, result) {
                 callback(err, result);
-                db.close();//关闭数据库
+                db.close();
             })
         });
 }
 
 exports.find = function (collectionName,json,callback) {
-    const result = [];   //结果数组
+    const result = [];  
     if(arguments.length != 3) {
         callback("find函数接受三个参数",null);
         return ;
     }
-    //链接数据库，链接之后查找所有
     _connectDB(function (err,db) {
         const cursor = db.collection(collectionName).find(json);
         cursor.each(function (err, doc) {
@@ -38,9 +37,8 @@ exports.find = function (collectionName,json,callback) {
                 return;
             }
            if(doc != null) {
-               result.push(doc); //放入结果数组
+               result.push(doc); 
            }else {
-               //遍历结束，没有更多的文档
                 callback(null,result);
            }
         });
