@@ -11,11 +11,11 @@ rpio是node.js的一个模块，用于对树莓派单片机的编程。singleChi
 
 sensor.py是传感器控制。将DHT11传感器的信号端接到某个GPIO引脚，例如GPIO.0，正负极分别接5V电和接地，命令行运行Python sensor.py 11 0 即运行温湿度采集，11代表DHT11传感器，0代表GPIO.0引脚。然后温湿度采集就开始了，前端程序跑起来就能看到数据实时变化。        
 
-engine.js是直流电机控制。给L298N电机驱动板接5V输入，A通道使能端接树莓派引脚GPIO.29，靠近A通道使能端的两个IO控制接口接GPIO.27、GPIO.28，电机输出端A接到小马达上，树莓派上运行node engine，就在Web前端控制电机了。         
+engine.js是直流电机控制。给L298N电机驱动板接5V输入，A通道使能端接树莓派引脚GPIO.29，靠近A通道使能端的两个IO控制接口接GPIO.27、GPIO.28，电机输出端A接到小马达上，树莓派上命令行运行node engine，即可在前端控制电机。         
 
-IO.js是简单IO控制，用GPIO.4、GPIO.5接两个LED灯然后接地，node IO，就能在前端控制开关灯了。
+IO.js是简单IO控制，用GPIO.4、GPIO.5接两个LED灯然后接地，命令行运行node IO，即可在前端控制两个LED灯。
 
-有一个测试账号：zhangwuji   
+一个测试账号：zhangwuji   
 密码：emm     
 
 
