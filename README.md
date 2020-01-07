@@ -25,18 +25,26 @@ IO.js是简单IO控制，用GPIO.4、GPIO.5接两个LED灯然后接地，命令�
 
 
 登陆界面：
-![Xnip2019-04-14_23-26-09.jpg](https://i.loli.net/2019/05/04/5ccd94418be6c.jpg)
-
+<div align='center'>
+  <img src='https://i.loli.net/2019/05/04/5ccd94418be6c.jpg' width='750px'>
+</div>
 
 主控界面：
-![Xnip2019-05-18_21-09-40.jpg](https://i.loli.net/2019/05/18/5ce0047aa759281728.jpg)
+<div align='center'>
+  <img src='https://i.loli.net/2019/05/18/5ce0047aa759281728.jpg' width='750px'>
+</div>
 
 其实主要是想做移动端：
-![mobileEnd.jpg](https://i.loli.net/2019/06/01/5cf2147046f5c96067.jpg)
+<div align='center'>
+  <img src='https://i.loli.net/2019/06/01/5cf2147046f5c96067.jpg' width='750px'>
+</div>
 
 管理员可以增删改账户：
-![Xnip2019-05-18_21-24-18.jpg](https://i.loli.net/2019/05/18/5ce007b0b4bb634151.jpg)
+<div align='center'>
+  <img src='https://i.loli.net/2019/05/18/5ce007b0b4bb634151.jpg' width='750px'>
+</div>
 
-
-点击[管理员权限]:
-![03.jpg](https://i.loli.net/2019/05/04/5ccd944169b79.jpg)
+点击[管理员权限]：
+<div align='center'>
+  <img src='https://i.loli.net/2019/05/04/5ccd944169b79.jpg' width='750px'>
+</div>
