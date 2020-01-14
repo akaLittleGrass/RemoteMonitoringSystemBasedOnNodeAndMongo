@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken');
 const secret = 'salt';
 
 mongoose.connect(dburl, { useNewUrlParser: true })
-.then(() => console.log("Mongodb of users connected"))
-.catch(err => console.log(err));
+  .then(() => console.log("Mongodb of users connected"))
+  .catch(err => console.log(err));
 
 const userSchema = mongoose.Schema({
   userName: String,
@@ -15,14 +15,13 @@ const userSchema = mongoose.Schema({
   type: String
 });
 const User = mongoose.model('User', userSchema);
-
-const found = function(res, users) {
+const found = function (res, users) {
   res.status(200).send({
     result: 'found',
     type: users[0].type
   });
 }
-const notFound = function(res){
+const notFound = function (res) {
   res.status(200).send({
     result: 'notFound',
     type: ''
@@ -31,37 +30,34 @@ const notFound = function(res){
 
 /* GET users listing. */
 
-router.post('/insert', function(req, res, next){
+router.post('/insert', function (req, res, next) {
   const data = req.body;
-  console.log(data);
-  User.find(data, function(err, users){
-    if(err) throw err;
-    if(!users.length){
+  User.find(data, function (err, users) {
+    if (err) throw err;
+    if (!users.length) {
       const newUser = User({
         userName: data.userName,
         passWord: data.passWord,
         type: data.type,
       })
-      newUser.save(function(err){
+      newUser.save(function (err) {
         if (err) throw err;
         console.log('User created successfully');
         res.status(200).send({
           result: 'succeed'
         });
       })
-    }else{
+    } else {
       found(res, users)
     }
-  })  
+  })
 });
 
-router.post('/login', function(req, res, next){
+router.post('/login', function (req, res, next) {
   const data = req.body;
-  console.log(data);
-  User.find(data, function(err, users){
-    if(err) throw err;
-    console.log(users);
-    if(!users.length){
+  User.find(data, function (err, users) {
+    if (err) throw err;
+    if (!users.length) {
       notFound(res);
       return
     }
@@ -70,7 +66,7 @@ router.post('/login', function(req, res, next){
       type: users[0].type
     }
     const token = jwt.sign(tokenData, secret, {
-      expiresIn : 60*60*12
+      expiresIn: 60 * 60 * 12
     });
     res.status(200).send({
       result: 'found',
@@ -80,63 +76,61 @@ router.post('/login', function(req, res, next){
   })
 })
 
-router.use('/verify', function(req, res){
+router.use('/verify', function (req, res) {
   const token = req.body.token || req.query.token || req.headers['token'];
-  console.log(token);
-  if (token) {      
-    jwt.verify(token, secret, function(err, decoded) {      
-        if (err) {
-          return res.json({ success: false, message: '无效的token.' });    
-        } else {
-          const tokenData ={
-            userName: decoded.userName,
-            type: decoded.type
-          };
-          const token = jwt.sign(tokenData, secret, {
-            expiresIn : 60*60*5
-          });
-          res.status(200).send({
-            ...tokenData,
-            token: token
-          })
+  if (token) {
+    jwt.verify(token, secret, function (err, decoded) {
+      if (err) {
+        return res.json({ success: false, message: '无效的token' });
+      } else {
+        const tokenData = {
+          userName: decoded.userName,
+          type: decoded.type
+        };
+        const token = jwt.sign(tokenData, secret, {
+          expiresIn: 60 * 60 * 5
+        });
+        res.status(200).send({
+          ...tokenData,
+          token: token
+        })
       }
     });
-  } else { 
-    return res.status(403).send({ 
-        success: false, 
-        message: 'no token.' 
+  } else {
+    return res.status(403).send({
+      success: false,
+      message: 'no token.'
     });
   }
 })
 
-router.post('/delete', function(req, res, next){
+router.post('/delete', function (req, res, next) {
   const data = req.body;
-  User.findOneAndRemove(data, function(err, users){
-    if(err) throw err;
-    if(users){
+  User.findOneAndRemove(data, function (err, users) {
+    if (err) throw err;
+    if (users) {
       console.log('User deleted successfully');
       res.status(200).send({
         result: 'succeed'
       });
-    }else{
+    } else {
       notFound(res);
     }
   })
 })
 
-router.post('/update', function(req, res, next){
+router.post('/update', function (req, res, next) {
   const data = req.body;
-  console.log(data);
   const target = {
     userName: data.userName,
   }
-  User.findOneAndUpdate(target, data, function(err, users){
-    if(err) throw err;
-    if(users){
+  User.findOneAndUpdate(target, data, function (err, users) {
+    if (err) throw err;
+    if (users) {
       res.status(200).send({
         result: 'succeed'
       });
-    }else{
+    } else {
       notFound(res);
     }
   })
