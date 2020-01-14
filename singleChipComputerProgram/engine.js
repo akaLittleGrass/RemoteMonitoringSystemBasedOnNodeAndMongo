@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const rpio = require('rpio');
 const dburl = "mongodb://new-user_0:553744@monitoringusersverify-shard-00-00-fjxrl.azure.mongodb.net:27017,monitoringusersverify-shard-00-01-fjxrl.azure.mongodb.net:27017,monitoringusersverify-shard-00-02-fjxrl.azure.mongodb.net:27017/deviceMsg?ssl=true&replicaSet=monitoringUsersVerify-shard-0&authSource=admin&retryWrites=true";
-mongoose.connect(dburl, { useNewUrlParser: true ,useCreateIndex: true,})
-.then(() => console.log("Mongodb of deviceMsg connected"))
-.catch(err => console.log(err));
+mongoose.connect(dburl, { useNewUrlParser: true, useCreateIndex: true, })
+	.then(() => console.log("Mongodb of deviceMsg connected"))
+	.catch(err => console.log(err));
 
 rpio.open(36, rpio.OUTPUT);
 rpio.open(38, rpio.OUTPUT);
@@ -13,25 +13,25 @@ rpio.write(40, rpio.HIGH);
 rpio.write(38, rpio.LOW);
 rpio.write(36, rpio.LOW);
 
-const runForward = function(){
+const runForward = function () {
 	rpio.write(38, rpio.HIGH);
 	rpio.write(36, rpio.LOW);
 }
-const runReverse = function(){
+const runReverse = function () {
 	rpio.write(38, rpio.LOW);
 	rpio.write(36, rpio.HIGH);
 }
-const runForwardSlow = function(){
+const runForwardSlow = function () {
 	rpio.write(36, rpio.LOW);
 	rpio.write(38, rpio.HIGH);
-	setTimeout(()=>rpio.write(38, rpio.LOW), 60)
+	setTimeout(() => rpio.write(38, rpio.LOW), 60)
 }
-const runReverseSlow = function(){
+const runReverseSlow = function () {
 	rpio.write(38, rpio.LOW);
 	rpio.write(36, rpio.HIGH);
-	setTimeout(()=>rpio.write(36, rpio.LOW), 60)
+	setTimeout(() => rpio.write(36, rpio.LOW), 60)
 }
-const stop = function(){
+const stop = function () {
 	rpio.write(38, rpio.LOW);
 	rpio.write(36, rpio.LOW);
 }
@@ -41,57 +41,57 @@ let lastIsForward;
 let lastIsSlow;
 
 const deviceSchema = mongoose.Schema({
-    id: String,
-    status: Boolean,
-    type: String,
-	 isSlow: Boolean,
-	 isForward: Boolean
+	id: String,
+	status: Boolean,
+	type: String,
+	isSlow: Boolean,
+	isForward: Boolean
 });
 
-const engine= mongoose.model('status', deviceSchema); 
+const engine = mongoose.model('status', deviceSchema);
 
-const find = function(){
-  engine.find({type: 'engine'}, function(err, res){
-    if(err) throw err;
-	 let engine = res[0]; 	
-	 if(engine.status){
-		if(engine.isSlow){
-			if(runSlow){
-				if(lastIsForward !== engine.isForward){
-					clearInterval(runSlow);
-					if(engine.isForward){
+const find = function () {
+	engine.find({ type: 'engine' }, function (err, res) {
+		if (err) throw err;
+		let engine = res[0];
+		if (engine.status) {
+			if (engine.isSlow) {
+				if (runSlow) {
+					if (lastIsForward !== engine.isForward) {
+						clearInterval(runSlow);
+						if (engine.isForward) {
+							runSlow = setInterval(runForwardSlow, 100);
+						} else {
+							runSlow = setInterval(runReverseSlow, 100);
+						}
+					}
+				} else {
+					if (engine.isForward) {
 						runSlow = setInterval(runForwardSlow, 100);
-					}else{
+					} else {
 						runSlow = setInterval(runReverseSlow, 100);
 					}
 				}
-			}else{
-				if(engine.isForward){
-					runSlow = setInterval(runForwardSlow, 100);
-				}else{
-					runSlow = setInterval(runReverseSlow, 100);
+				lastIsForward = engine.isForward;
+			} else {
+				if (runSlow) {
+					clearInterval(runSlow);
+					runSlow = void 0;
+				}
+				if (engine.isForward) {
+					console.log('runForward');
+					runForward();
+				} else {
+					console.log('reverse');
+					runReverse();
 				}
 			}
-		lastIsForward = engine.isForward;
-		}else{
-			if(runSlow){
-				clearInterval(runSlow);
-				runSlow = void 0;
-			}
-			if(engine.isForward){
-				console.log('runForward');
-				runForward();
-			}else{
-				console.log('reverse');
-				runReverse();
-			}
+		} else {
+			if (runSlow) clearInterval(runSlow);
+			stop();
 		}
-	 }else{
-		if(runSlow)clearInterval(runSlow);
-		stop();
-	}
-  })
+	})
 }
-const Interval = setInterval(find,2000);
+const Interval = setInterval(find, 2000);
 
 
