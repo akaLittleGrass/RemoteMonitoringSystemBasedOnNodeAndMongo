@@ -12,8 +12,8 @@
 
 &emsp;&emsp;IO.js是简单IO控制，用GPIO.4、GPIO.5接两个LED灯然后接地，命令行运行node IO，即可通过前端控制两个LED灯。
 
-一个测试账号：zhangwuji   
-密码：emm     
+&emsp;&emsp;一个测试账号：zhangwuji   
+&emsp;&emsp;密码：emm     
 
 
 实物图：
