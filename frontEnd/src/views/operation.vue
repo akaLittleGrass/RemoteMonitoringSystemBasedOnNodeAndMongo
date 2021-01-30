@@ -140,7 +140,7 @@ export default {
     const token = localStorage.getItem("token");
     if (token) {
       axios.defaults.headers.common["token"] = token;
-      request("/users/verify", "GET").then(response => {
+      request.get("/users/verify").then(response => {
         if (response.status === 200) {
           this.user = response.data.userName;
           this.userType = response.data.type;
@@ -148,7 +148,7 @@ export default {
         }
       });
     }
-    request("/device/find", "GET").then(response => {
+    request.get("/device/find").then(response => {
       if (response.status === 200) {
         const deviceList = response.data;
         for (let value of deviceList) {
@@ -210,7 +210,7 @@ export default {
           delete data.type;
           break;
       }
-      request(path, "POST", data).then(response => {
+      request.post(path, data).then(response => {
         if (response.data.result === "succeed") {
           this.manageTagShow = false;
           this.showMobileMenu = false;
@@ -253,7 +253,7 @@ export default {
         id: deviceId,
         status: deviceStatus
       };
-      request(path, "POST", setSpeed || setDirection || data).then(response => {
+      request.post(path, setSpeed || setDirection || data).then(response => {
         if (response.data === "succeed") {
           switch (deviceId) {
             case "device1":
@@ -316,7 +316,7 @@ export default {
         let chart = echarts.init(chartContainner);
         chart.setOption(chartOption);
         setInterval(function() {
-          request("/device/read", "GET").then(response => {
+          request.get("/device/read").then(response => {
             if (response.data.temperature && response.data.humidity) {
               this.temperature = response.data.temperature;
               this.humidity = response.data.humidity;

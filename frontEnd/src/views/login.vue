@@ -25,19 +25,18 @@ export default {
   },
   methods: {
     login() {
-      let that = this;
-      request("/users/login", "POST", {
+      request.post("/users/login", {
         userName: this.userName,
         passWord: this.passWord
-      }).then(function(response) {
+      }).then((response) => {
         console.log(response);
         localStorage.setItem("token", response.data.token);
         if (response.data.result === "found") {
-          that.$router.push({
+          this.$router.push({
             path: "/"
           });
         } else if (response.data.result === "notFound") {
-          that.$message({
+          this.$message({
             message: "用户名或密码错误",
             customClass: "messageBox"
           });
