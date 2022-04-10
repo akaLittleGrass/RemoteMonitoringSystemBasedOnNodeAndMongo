@@ -5,7 +5,7 @@
 ## 树莓派脚本
 &emsp;&emsp;rpio是node.js的一个模块，用于对树莓派单片机的编程。singleChipComputerProgram目录下有IO.js、engine.js、sensor.py三个演示脚本。  
 
-&emsp;&emsp;sensor.py是传感器控制。将DHT11传感器的信号端接到某个GPIO引脚，例如GPIO.0，正负极分别接5V电和接地，命令行运行Python sensor.py 11 0 即运行温湿度采集，11代表DHT11传感器，0代表GPIO.0引脚。然后温湿度采集就开始了，前端就能看到数据实时变化。        
+&emsp;&emsp;sensor.py是传感器控制脚本。将DHT11传感器的信号端接到某个GPIO引脚，例如GPIO.0，正负极分别接5V电和接地，命令行运行Python sensor.py 11 0 即运行温湿度采集，11代表DHT11传感器，0代表GPIO.0引脚。然后温湿度采集就开始了，前端就能看到数据实时变化。        
 
 &emsp;&emsp;engine.js是直流电机控制。给L298N电机驱动板接5V输入，A通道使能端接树莓派引脚GPIO.29，靠近A通道使能端的两个IO控制接口接GPIO.27、GPIO.28，电机输出端A接到小马达上，树莓派上命令行运行node engine，即可通过前端控制电机。         
 
